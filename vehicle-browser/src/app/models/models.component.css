@@ -1,0 +1,13 @@
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+
+mat-form-field {
+  margin-right: 10px;
+}
+
+table {
+  width: 100%;
+}
+
+.nextPageArrow {
+  float: right;
+}
