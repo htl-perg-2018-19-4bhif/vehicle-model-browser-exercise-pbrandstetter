@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatTableDataSource } from '@angular/material';
 
@@ -16,8 +16,6 @@ interface IModel {
   styleUrls: ['./models.component.css']
 })
 export class ModelsComponent implements OnInit {
-  private resultsPerPage = 10;
-
   models: IModel[];
   makes: string[] = [];
   years: number[] = [];
@@ -25,6 +23,7 @@ export class ModelsComponent implements OnInit {
   filterYear: string = "";
   curPage = 0;
   lastPage: boolean = false;
+  resultsPerPage = 10;
 
   dataSource: MatTableDataSource<IModel> = new MatTableDataSource();
   displayedColumns: string[] = ['year', 'make', 'model'];
@@ -42,11 +41,11 @@ export class ModelsComponent implements OnInit {
     const offset = this.curPage * this.resultsPerPage;
     const year = this.filterYear ? this.filterYear : "";
     const make = this.filterMake ? this.filterMake : "";
-    await this.http.get<IModel[]>(`https://vehicle-data.azurewebsites.net/api/models?offset=${offset}&year=${year}&make=${make}`).subscribe(res => {
+    await this.http.get<IModel[]>(`https://vehicle-data.azurewebsites.net/api/models?offset=${offset}&fetch=${this.resultsPerPage}&year=${year}&make=${make}`).subscribe(res => {
       this.models = res;
       this.dataSource = new MatTableDataSource(this.models);
     });
-    this.http.get<IModel[]>(`https://vehicle-data.azurewebsites.net/api/models?offset=${offset+this.resultsPerPage}&year=${year}&make=${make}`).subscribe(res => {
+    this.http.get<IModel[]>(`https://vehicle-data.azurewebsites.net/api/models?offset=${offset+this.resultsPerPage}&fetch=${this.resultsPerPage}&year=${year}&make=${make}`).subscribe(res => {
       this.lastPage = res.length === 0;
     });
   }
